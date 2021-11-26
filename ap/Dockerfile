@@ -11,4 +11,4 @@ WORKDIR /Yuri-Kabe
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
 
-#RUN python3 app.py
+CMD ["uwsgi","--ini","uwsgi.ini"]

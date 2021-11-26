@@ -1,0 +1,27 @@
+version: '0'
+
+services:
+
+  ap:
+    build: ./ap
+    container_name: ap01
+    networks:
+      - Yuri-Kabe_network
+    ports: 
+      - 5000:5000
+
+  web:
+    build: ./web
+    container_name: web01
+    ports: 
+      - 8080:8080
+    depends_on: 
+      - ap
+    environment:
+      - "TZ=Japan"
+    networks:
+      - Yuri-Kabe_network
+
+networks:
+  Yuri-Kabe_network:
+    driver: bridge

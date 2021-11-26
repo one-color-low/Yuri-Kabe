@@ -3,9 +3,11 @@ PythonコンテナでuWSGIとapp本体が動作するapサーバーです。
 
 # Usage
 ## In Container
-`uwsgi --http=0.0.0.0:5000 --wsgi-file=app.py --callable=app`
+`uwsgi --http=0.0.0.0:5000 --wsgi-file=main.py --callable=app`
+↓
+`uwsgi --ini uwsgi.ini` でok。
 
-※`python3 app.py`をすると`if __name__=='__main__'`が実行され、gunicornで動作してしまう。(多分)
+※`python3 main.py`をすると`if __name__=='__main__'`が実行され、gunicornで動作してしまう。(多分)
 
 ## Out Container
 `docker build ./ -t xxx-app`
