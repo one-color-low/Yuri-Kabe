@@ -4,6 +4,8 @@ RUN apt-get update -y
 RUN apt-get install -y python3-pip
 RUN apt-get install -y libpcre3-dev
 
+RUN mkdir /Yuri-Kabe
+
 COPY ./ /Yuri-Kabe
 
 WORKDIR /Yuri-Kabe

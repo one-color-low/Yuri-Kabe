@@ -9,6 +9,8 @@ services:
       - Yuri-Kabe_network
     ports: 
       - 5000:5000
+    volumes: 
+      - ./ap:/Yuri-Kabe
 
   web:
     build: ./web
@@ -21,6 +23,8 @@ services:
       - "TZ=Japan"
     networks:
       - Yuri-Kabe_network
+    volumes:
+      - ./web/conf:/etc/nginx/conf.d/
 
 networks:
   Yuri-Kabe_network:

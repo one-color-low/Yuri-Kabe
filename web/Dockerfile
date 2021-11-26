@@ -7,6 +7,6 @@ RUN apt-get install -y vim locales
 #COPY ./nginx.conf /etc/nginx/nginx.conf 
 
 # nginx.conf で include /etc/nginx/conf.d/*.conf; するので、好きな名前で設定ファイルを置けばOK。
-COPY ./uwsgi.conf /etc/nginx/conf.d/uwsig.conf 
+COPY ./conf/uwsgi.conf /etc/nginx/conf.d/uwsig.conf 
 
 CMD ["nginx", "-g", "daemon off;"]
