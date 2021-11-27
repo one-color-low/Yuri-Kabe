@@ -2,7 +2,7 @@ version: '0'
 
 services:
 
-  ap:
+  ap: # これがドメインになる
     build: ./ap
     container_name: ap01
     networks:
