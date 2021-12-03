@@ -3,7 +3,7 @@ Description = uWSGI
 After = syslog.target
 
 [Service]
-ExecStart = uwsgi --ini ./uwsgi.ini
+ExecStart = uwsgi --ini /Yuri-Kabe/uwsgi.ini
 Restart=always
 KillSignal=SIGQUIT
 Type=notify

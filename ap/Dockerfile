@@ -5,6 +5,7 @@ RUN apt-get install -y python3-pip
 RUN apt-get install -y libpcre3-dev
 RUN apt-get install -y systemctl
 RUN apt-get install -y vim
+RUN apt-get install -y iputils-ping net-tools
 
 RUN mkdir /Yuri-Kabe
 

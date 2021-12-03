@@ -30,7 +30,7 @@
             var formData = new FormData(document.getElementById("upload_form"))
 
             var xhr = new XMLHttpRequest()
-            xhr.open('POST', '/upload') //第3引数はasyncするか。デフォルトでtrue
+            xhr.open('POST', '/nginxupload') //第3引数はasyncするか。デフォルトでtrue
             xhr.send(formData)
 
         }

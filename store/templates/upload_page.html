@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>upload page</title>
+</head>
+
+<body>
+
+    <form id="upload_form">
+        <p> zipファイルをアップロードしてください </p>
+        <input type="file" name="zip_input" />
+
+        <p> Room名を入力してください </p>
+        <input type="text" name="room_name" />
+
+        <p> Author名を入力してください </p>
+        <input type="text" name="author" />
+    </form>
+
+    <button id="upload_btn">アップロード</button>
+
+    <script>
+
+        var upload_btn = document.getElementById("upload_btn")
+
+        upload_btn.onclick = function () {
+
+            var formData = new FormData(document.getElementById("upload_form"))
+
+            var xhr = new XMLHttpRequest()
+            xhr.open('POST', '/store/upload') //第3引数はasyncするか。デフォルトでtrue
+            xhr.send(formData)
+
+        }
+
+    </script>
+
+</body>
+
+</html>

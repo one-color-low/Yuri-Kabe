@@ -5,9 +5,16 @@ import random
 import zipfile
 import tempfile
 
+import logging
+
+from werkzeug.utils import send_from_directory
+
+logging.basicConfig(filename='/var/log/python.log', level=logging.DEBUG)
+
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = app.root_path + "/static"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db_uri = "sqlite:///" + os.path.join(app.root_path, 'oshikabe.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
@@ -63,7 +70,8 @@ def room():
     if is_exist(room_name):
         entry = Entry.query.filter(Entry.room_name == request.args.get('room_name') ).first()
         print(entry.room_path)
-        return app.send_static_file(entry.room_path + "index.html")
+        return send_from_directory(entry.room_path, 'index.html')
+        #return app.send_static_file(entry.room_path + "index.html")
     else:
         return "NG"
 

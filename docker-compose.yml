@@ -2,29 +2,39 @@ version: '0'
 
 services:
 
-  ap: # これがドメインになる
-    build: ./ap
-    container_name: ap01
-    networks:
-      - Yuri-Kabe_network
-    ports: 
-      - 5000:5000
-    volumes: 
-      - ./ap:/Yuri-Kabe
+  # ap: #これがドメインになる
+  #   build: ./ap
+  #   container_name: ap01
+  #   networks:
+  #     - Yuri-Kabe_network
+  #   ports: 
+  #     - 5000:5000
+  #   volumes: #マウント
+  #     - ./ap:/Yuri-Kabe
 
   web:
     build: ./web
     container_name: web01
     ports: 
       - 8080:8080
-    depends_on: 
-      - ap
     environment:
       - "TZ=Japan"
     networks:
       - Yuri-Kabe_network
     volumes:
       - ./web/conf:/etc/nginx/conf.d/
+    
+  store:
+    build: ./store
+    container_name: store01
+    ports:
+      - 8081:8081
+    environment:
+      - "TZ=Japan"
+    networks: 
+      - Yuri-Kabe_network
+    volumes:
+      - ./store/conf:/etc/nginx/conf.d/
 
 networks:
   Yuri-Kabe_network:
