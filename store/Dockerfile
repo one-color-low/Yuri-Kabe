@@ -8,9 +8,7 @@ RUN apt-get install -y iputils-ping net-tools
 # nginx.conf で include /etc/nginx/conf.d/*.conf; するので、好きな名前で設定ファイルを置けばOK。
 COPY ./conf/store.conf /etc/nginx/conf.d/store.conf 
 
-COPY ./sampleroom /var/www/sampleroom
 COPY ./index.html /var/www/index.html
-RUN chown -R www-data:www-data /var/www/sampleroom
 
 RUN mkdir /var/log/uwsgi
 

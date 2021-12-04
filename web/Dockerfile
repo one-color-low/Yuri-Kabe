@@ -7,10 +7,12 @@ RUN apt-get install -y iputils-ping net-tools
 # nginx.conf で include /etc/nginx/conf.d/*.conf; するので、好きな名前で設定ファイルを置けばOK。
 COPY ./conf/web.conf /etc/nginx/conf.d/web.conf 
 
-COPY ./index.html /var/www/index.html
+# トップページの設定
+COPY ./source/index.html /var/www/index.html
 RUN chown -R www-data:www-data /var/www
 
 # デフォルトのパーミッション設定
+WORKDIR /var/www
 RUN umask 000
 
 CMD ["nginx", "-g", "daemon off;"]
