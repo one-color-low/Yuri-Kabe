@@ -12,7 +12,7 @@ COPY ./sampleroom /var/www/sampleroom
 COPY ./index.html /var/www/index.html
 RUN chown -R www-data:www-data /var/www/sampleroom
 
-CMD ["nginx", "-g", "daemon off;"]
+RUN mkdir /var/log/uwsgi
 
 
 # Python
@@ -31,6 +31,16 @@ RUN pip3 install -r requirements.txt
 
 COPY ./conf/uwsgi.service /etc/systemd/system
 
-CMD ["uwsgi","--ini","conf/uwsgi.ini"]
+RUN uwsgi --ini conf/uwsgi.ini
 
-# dockerの制約でdeamon off。pythonとの順番変更必要？
+
+# 以下CMD(コンテナ起動時に実行されるコマンド)
+
+## nginxを起動(deamon offは必須)
+#CMD ["nginx", "-g", "daemon off;"]
+
+## デーモンとしてuwsgiを起動
+#CMD ["uwsgi","--ini","conf/uwsgi.ini"]
+
+# 多分上のCMDがフォアグラウンドで実行されて(pid 1)、下のCMDが実行されない。
+# Nginxはどっちにしろ起動されるっぽいので、uwsgi実行コマンドをいい感じにできるといいね。(最悪手動でもいいけど)
