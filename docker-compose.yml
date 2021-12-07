@@ -2,16 +2,6 @@ version: '3'
 
 services:
 
-  # ap: #これがドメインになる
-  #   build: ./ap
-  #   container_name: ap01
-  #   networks:
-  #     - Yuri-Kabe_network
-  #   ports: 
-  #     - 5000:5000
-  #   volumes: #マウント
-  #     - ./ap:/Yuri-Kabe
-
   web:
     build: ./web
     container_name: web01
@@ -22,7 +12,7 @@ services:
     networks:
       - Yuri-Kabe_network
     volumes:
-      - ./web/conf:/etc/nginx/conf.d/
+      - ./web/source:/var/www/
     
   store:
     build: ./store
@@ -33,9 +23,7 @@ services:
       - "TZ=Japan"
     networks: 
       - Yuri-Kabe_network
-    volumes:
-      - ./store/conf:/etc/nginx/conf.d/
-
+      
 networks:
   Yuri-Kabe_network:
     driver: bridge
