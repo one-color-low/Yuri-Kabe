@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = "/var/www"
 
+#Roomアップロード用API
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
@@ -23,7 +24,7 @@ def upload():
 
         return "ng"
 
-
+#Room情報保存用API
 @app.route('/save_info', methods=['GET', 'POST'])
 def save_info():
     if request.method == 'POST':
@@ -59,4 +60,3 @@ def get_list():
 if __name__ == "__main__":
     app.run()
 
-# react, 仮想dom, フレーム分割、再帰的に同じ画面を
