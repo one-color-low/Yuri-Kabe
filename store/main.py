@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 import zipfile, os
+import db_tools
 
 app = Flask(__name__)
 
@@ -9,19 +10,53 @@ app.config['UPLOAD_FOLDER'] = "/var/www"
 def upload():
     if request.method == 'POST':
 
-        room_name = request.form['room_name']
+        room_id = request.form['room_id']
         file = request.files['zip_input']
-        upload_path = os.path.join(app.config['UPLOAD_FOLDER'], room_name)
+        upload_path = os.path.join(app.config['UPLOAD_FOLDER'], room_id)
 
         with zipfile.ZipFile(file) as existing_zip:
             existing_zip.extractall(path=upload_path)
 
-    return "ok"
+        return "ok"
 
-@app.route('/upload_page', methods=['GET', 'POST'])
-def upload_page():
-    return render_template("upload_page.html")
+    else:
+
+        return "ng"
+
+
+@app.route('/save_info', methods=['GET', 'POST'])
+def save_info():
+    if request.method == 'POST':
+
+        if not db_tools.is_exist(request.form['room_id']):
+
+            db_tools.add_entry(
+                id = request.form['room_id'],
+                author = request.form['author'],
+                title = request.form['title'],
+                description = request.form['description'],
+                tags = request.form['tags']
+            )
+
+            return "ok"
+
+        else:
+
+            return "Room Already Exist."
+
+    else:
+
+        return "ng"
+
+
+# jsonでroom_infoテーブルを上から10個返すAPI
+@app.route('/get_list', methods=['GET', 'POST'])
+def get_list():
+    table = db_tools.get_latest_n(10)
+    return table
 
 
 if __name__ == "__main__":
     app.run()
+
+# react, 仮想dom, フレーム分割、再帰的に同じ画面を
