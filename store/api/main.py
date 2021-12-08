@@ -53,8 +53,9 @@ def save_info():
 # jsonでroom_infoテーブルを上から10個返すAPI
 @app.route('/get_list', methods=['GET', 'POST'])
 def get_list():
-    table = db_tools.get_latest_n(10)
-    return table
+    #table = db_tools.get_latest_n(10)
+    #return table
+    return "ng"
 
 
 if __name__ == "__main__":
