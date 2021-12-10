@@ -17,12 +17,14 @@ def upload():
 
         with zipfile.ZipFile(file) as existing_zip:
             existing_zip.extractall(path=upload_path)
+        
+        room_url = "http://localhost/store/" + "upload_path" + "/1st"
 
-        return "ok"
+        return room_url
 
     else:
 
-        return "ng"
+        return "ngggggg"
 
 #Room情報保存用API
 @app.route('/save_info', methods=['GET', 'POST'])

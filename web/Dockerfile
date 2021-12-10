@@ -8,7 +8,7 @@ RUN apt-get install -y iputils-ping net-tools
 COPY ./conf/web.conf /etc/nginx/conf.d/web.conf 
 
 # トップページの設定
-COPY ./source /var/www
+COPY ./static /var/www
 RUN chown -R www-data:www-data /var/www
 
 # デフォルトのパーミッション設定

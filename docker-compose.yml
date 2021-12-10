@@ -12,7 +12,7 @@ services:
     networks:
       - Yuri-Kabe_network
     volumes:
-      - ./web/source:/var/www/
+      - ./web/static:/var/www/
     
   store:
     build: ./store
@@ -23,6 +23,8 @@ services:
       - "TZ=Japan"
     networks: 
       - Yuri-Kabe_network
+    volumes:
+      - ./store/api:/api
       
 networks:
   Yuri-Kabe_network:
