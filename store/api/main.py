@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import zipfile, os
 import db_tools
 
@@ -18,13 +18,13 @@ def upload():
         with zipfile.ZipFile(file) as existing_zip:
             existing_zip.extractall(path=upload_path)
         
-        room_url = "http://localhost/store/" + "upload_path" + "/1st"
+        room_url = "http://localhost/store/" + room_id + "/1st/" #最後の"/"が無いと勝手にリダイレクトされる
 
-        return room_url
+        return jsonify([room_url, room_id])
 
     else:
 
-        return "ngggggg"
+        return "ngg"
 
 #Room情報保存用API
 @app.route('/save_info', methods=['GET', 'POST'])

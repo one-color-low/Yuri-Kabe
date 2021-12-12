@@ -21,15 +21,38 @@
 
     <button id="upload_btn">アップロード</button>
 
+    <p>ルーム一覧</p>
+    <table id="room_list">
+        <tr>
+            <th>ルームURL</th>
+        </tr>
+    </table>
+
     <script>
 
         var upload_btn = document.getElementById("upload_btn")
+
+        function addRoomUrl(room_url, room_id){
+            var table = document.getElementById("room_list")
+            var rows = table.insertRow(-1)
+            var cell = rows.insertCell(0)
+            cell.innerHTML = '<a href="' + room_url + '">' + room_id + '</a>'
+        }
 
         upload_btn.onclick = function () {
 
             var formData = new FormData(document.getElementById("upload_form"))
 
             var xhr = new XMLHttpRequest()
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    //console.log(xhr.response)
+                    var res = JSON.parse(xhr.response)
+                    addRoomUrl(res[0], res[1]);
+                }
+            }
+
             xhr.open('POST', '/api/upload') //第3引数はasyncするか。デフォルトでtrue
             xhr.send(formData)
 
