@@ -3,23 +3,11 @@
 
 <head>
     <meta charset="utf-8">
-    <title>upload page</title>
+    <title>room list page</title>
 </head>
 
 <body>
 
-    <form id="upload_form">
-        <p> ルームファイル(zip形式)をアップロードしてください </p>
-        <input type="file" name="zip_input" />
-
-        <p> タイトルを入力してください </p>
-        <input type="text" name="title" />
-
-        <p> 説明文を入力してください </p>
-        <input type="text" name="description" />
-    </form>
-
-    <button id="upload_btn">アップロード</button>
 
     <p>ルーム一覧</p>
     <table id="room_list">
@@ -30,8 +18,6 @@
     </table>
 
     <script>
-
-        var upload_btn = document.getElementById("upload_btn")
 
         function addRoomUrl(room_id, title, description){
             var table = document.getElementById("room_list")
@@ -59,24 +45,6 @@
 
         };
 
-        upload_btn.onclick = function () {
-
-            var formData = new FormData(document.getElementById("upload_form"))
-
-            var xhr = new XMLHttpRequest()
-
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    //console.log(xhr.response)
-                    var res = JSON.parse(xhr.response)
-                    addRoomUrl(res[0], res[1], res[2]);
-                }
-            }
-
-            xhr.open('POST', '/api/upload') //第3引数はasyncするか。デフォルトでtrue
-            xhr.send(formData)
-
-        }
 
     </script>
 

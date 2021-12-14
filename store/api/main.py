@@ -39,8 +39,6 @@ def upload():
             description=request.form['description']
         )
 
-        #room_url = "http://localhost/store/" + room_id + "/1st/" #最後の"/"が無いと勝手にリダイレクトされるので注意
-
         return jsonify([room_id, request.form['title'], request.form['description']])
 
     else:
