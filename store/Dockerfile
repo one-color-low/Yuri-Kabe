@@ -3,10 +3,10 @@ FROM nginx:latest
 # Nginx
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y vim locales
-RUN apt-get install -y iputils-ping net-tools
+RUN apt-get install -y iputils-ping net-tools sqlite3
 
 ## nginx.conf で include /etc/nginx/conf.d/*.conf; するので、好きな名前で設定ファイルを置けばOK。
-COPY ./conf/store.conf /etc/nginx/conf.d/store.conf 
+COPY ./conf/store.conf /etc/nginx/conf.d/store.conf
 RUN mkdir /var/log/uwsgi
 
 # Python

@@ -9,23 +9,20 @@
 <body>
 
     <form id="upload_form">
-        <p> zipファイルをアップロードしてください </p>
+        <p> ルームファイル(zip形式)をアップロードしてください </p>
         <input type="file" name="zip_input" />
 
-        <p> Room IDを入力してください </p>
-        <input type="text" name="room_id" />
+        <p> タイトルを入力してください </p>
+        <input type="text" name="title" />
 
-        <p> Author名を入力してください </p>
-        <input type="text" name="author" />
+        <p> 説明文を入力してください </p>
+        <input type="text" name="description" />
     </form>
 
     <button id="upload_btn">アップロード</button>
 
     <p>ルーム一覧</p>
     <table id="room_list">
-        <tr>
-            <th>ルームURL</th>
-        </tr>
     </table>
 
     <script>
