@@ -23,18 +23,41 @@
 
     <p>ルーム一覧</p>
     <table id="room_list">
+        <tr>
+            <td>タイトル</td>
+            <td>説明文</td>
+        </tr>
     </table>
 
     <script>
 
         var upload_btn = document.getElementById("upload_btn")
 
-        function addRoomUrl(room_url, room_id){
+        function addRoomUrl(room_id, title, description){
             var table = document.getElementById("room_list")
             var rows = table.insertRow(-1)
-            var cell = rows.insertCell(0)
-            cell.innerHTML = '<a href="' + room_url + '">' + room_id + '</a>'
+            var cell_0 = rows.insertCell(0)
+            var cell_1 = rows.insertCell(1)
+            var room_url = "http://localhost/store/" + room_id + "/1st/"
+            cell_0.innerHTML = '<a href="' + room_url + '">' + title + '</a>'
+            cell_1.innerHTML = '<div>' + description + '</div>'
         }
+
+        window.onload = function() {
+            var xhr = new XMLHttpRequest()
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    //console.log(xhr.response)
+                    var res_list = JSON.parse(xhr.response)
+                    for (var res of res_list) {
+                        addRoomUrl(res[0], res[1], res[2]);
+                    }
+                }
+            }
+            xhr.open('POST', '/api/get_list')
+            xhr.send()
+
+        };
 
         upload_btn.onclick = function () {
 
@@ -46,7 +69,7 @@
                 if (xhr.readyState === 4) {
                     //console.log(xhr.response)
                     var res = JSON.parse(xhr.response)
-                    addRoomUrl(res[0], res[1]);
+                    addRoomUrl(res[0], res[1], res[2]);
                 }
             }
 

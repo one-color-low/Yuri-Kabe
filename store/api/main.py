@@ -39,9 +39,9 @@ def upload():
             description=request.form['description']
         )
 
-        room_url = "http://localhost/store/" + room_id + "/1st/" #最後の"/"が無いと勝手にリダイレクトされるので注意
+        #room_url = "http://localhost/store/" + room_id + "/1st/" #最後の"/"が無いと勝手にリダイレクトされるので注意
 
-        return jsonify([room_url, room_id])
+        return jsonify([room_id, request.form['title'], request.form['description']])
 
     else:
 
@@ -52,15 +52,11 @@ def upload():
 @app.route('/get_list', methods=['GET', 'POST'])
 def get_list():
     table = RoomOperation.get_latest_n(1)
-    id_list = []
-    title_list = []
-    description_list = []
+    data_list = []
     for row in table:
-        id_list.append(row.id)
-        title_list.append(row.title)
-        description_list.append(row.description)
-    return jsonify([id_list, title_list, description_list])
-    #return "ok"
+        data = [row.id, row.title, row.description]
+        data_list.append(data)
+    return jsonify(data_list)
 
 
 if __name__ == "__main__":
