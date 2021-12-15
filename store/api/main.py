@@ -4,6 +4,7 @@ import database
 from models.models import *
 
 import random
+import uuid
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ database.init_db(app)
 def upload():
     if request.method == 'POST':
 
-        room_id = str(random.uniform(100, 200)) #todo: DBを参照して連続値を入れるように
+        room_id = str(uuid.uuid1())
         author = "anonymous"
 
         #ファイル保存
