@@ -66,10 +66,14 @@
             var xhr = new XMLHttpRequest()
 
             xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    //console.log(xhr.response)
-                    var res = JSON.parse(xhr.response)
-                    addRoomUrl(res[0], res[1], res[2]);
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    var status = xhr.status;
+                    if (status === 0 || (status >= 200 && status < 400)) {
+                        var res = JSON.parse(xhr.response)
+                        addRoomUrl(res[0], res[1], res[2]);
+                    } else {
+                        console.log("Error. Status: " + status)
+                    }
                 }
             }
 

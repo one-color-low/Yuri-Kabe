@@ -1,3 +1,4 @@
+from os import name
 from database import db
 
 # これがModel
@@ -7,6 +8,12 @@ class Room(db.Model):
     author = db.Column(db.String(), nullable=False)
     title = db.Column(db.String(), nullable=True)
     description = db.Column(db.String(), nullable=True)
+
+class User(db.Model): 
+    __tablename__ = "user_info" 
+    id = db.Column(db.String(), nullable=False, primary_key=True) 
+    name = db.Column(db.String(), nullable=False)
+    token = db.Column(db.String(), nullable=True)
 
 # こっからメソッド
 class RoomOperation():
@@ -30,4 +37,26 @@ class RoomOperation():
 
     def get_latest_n(n):
         table = db.session.query(Room).all()
+        return table
+    
+class UserOperation():
+    def add_entry(id, name, token):
+        entry = User()
+        entry.id = id
+        entry.name = name
+        entry.token = token
+
+        db.session.add(entry)
+        db.session.commit()
+        return 0
+
+    def is_exist(id):
+        table = User.query.all()
+        for row in table:
+            if row.id == id:
+                return True
+        return False
+
+    def get_latest_n(n):
+        table = db.session.query(User).all()
         return table
