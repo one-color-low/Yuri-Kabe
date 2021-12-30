@@ -2,11 +2,88 @@
 <html>
 
 <head>
-    <title>title</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+
+    <style>
+        a {
+            color: #000000;
+        }
+    </style>
 </head>
 
 <body>
-    <p>Web</p>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+    <p>Yuri-Kabe</p>
+
+    <div class="container">
+        <div class="row">
+          <div class="col-4">
+            <input type="text">
+          </div>
+          <div class="col">
+            <a href="https://google.com"><i class="bi bi-search"></i></a>
+          </div>
+          <div class="col">
+            <a href="./up.html"><i class="bi bi-file-plus"></i></a>
+          </div>
+          <div class="col">
+            <a href="./login.html"><i class="bi bi-person"></i></a>
+          </div>
+        </div>
+
+        <br><hr>
+        
+        <div class="row">
+            <p>List Of Rooms</p>
+
+            <table id="room_list">
+                <tr>
+                    <td>Title</td>
+                    <td>Description</td>
+                </tr>
+            </table>
+        
+            <script>
+        
+                function addRoomUrl(room_id, title, description){
+                    var table = document.getElementById("room_list")
+                    var rows = table.insertRow(-1)
+                    var cell_0 = rows.insertCell(0)
+                    var cell_1 = rows.insertCell(1)
+                    var room_url = "http://" + location.host + "/store/" + room_id + "/1st/"
+                    cell_0.innerHTML = '<a href="' + room_url + '">' + title + '</a>'
+                    cell_1.innerHTML = '<div>' + description + '</div>'
+                }
+        
+                window.onload = function() {
+                    var xhr = new XMLHttpRequest()
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            //console.log(xhr.response)
+                            var res_list = JSON.parse(xhr.response)
+                            for (var res of res_list) {
+                                addRoomUrl(res[0], res[1], res[2]);
+                            }
+                        }
+                    }
+                    xhr.open('POST', '/api/get_list')
+                    xhr.send()
+        
+                };
+        
+        
+            </script>
+
+        </div>
+      </div>
+
 </body>
 
 </html>

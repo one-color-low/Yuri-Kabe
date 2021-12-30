@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, flash, redirect
 import zipfile, os
 import database
 from models.models import *
@@ -43,16 +43,33 @@ def upload():
     if request.method != 'POST':
         return jsonify({'message': 'Unexpected request type.'}), 400
 
+    if 'zip_input' not in request.files:
+        return jsonify({'message': 'No file part.'}), 400
+
     file = request.files['zip_input'] 
+
+    if file.filename == '':
+        return jsonify({'message': 'No selected file.'}), 400
+    
+
+    if 'title' not in request.form:
+        return jsonify({'message': 'No title part.'}), 400
+
     title = request.form['title']
+
+    if title == '':
+        return jsonify({'message': 'No input title.'}), 400
+
+
+    if 'description' not in request.form:
+        return jsonify({'message': 'No description part.'}), 400
+
     description = request.form['description']
 
-    if 'file' not in file: 
-        return jsonify({'message': 'Zip file not uploaded.'}), 400
-
-    if title == "":
-        return jsonify({'message': 'Title not inputed.'}), 400
+    if description == '':
+        return jsonify({'message': 'No input description.'}), 400
     
+
     room_id = str(uuid.uuid1())
     author = "anonymous"
 

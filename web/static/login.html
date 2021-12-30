@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Login Page</title>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="248112257157-bqfdj7g676v0b9j5m747cveuchoj4p5v.apps.googleusercontent.com">
+
+    <script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('Login as ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <p>Login with Google</p>
+
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+    <br><hr>
+
+    <p>or</p>
+
+    <button onclick = "location.href='./register.html'" > Register </button>
+
+</body>
+
+</html>
