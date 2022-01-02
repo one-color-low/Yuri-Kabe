@@ -1,4 +1,5 @@
 from os import name
+from posix import RTLD_NODELETE
 from database import db
 
 # これがModel
@@ -60,3 +61,11 @@ class UserOperation():
     def get_latest_n(n):
         table = db.session.query(User).all()
         return table
+
+    def get_id_from_token(token):
+        table = User.query.all()
+        for row in table:
+            if row.token == token:
+                print("ok")
+                return row.id
+        return "user id not found."

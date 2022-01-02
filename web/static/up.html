@@ -4,12 +4,18 @@
 <head>
     <meta charset="utf-8">
     <title>upload page</title>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="248112257157-bqfdj7g676v0b9j5m747cveuchoj4p5v.apps.googleusercontent.com">
+
 </head>
 
 <body>
 
+    <p> <a href="./">Yuri-Kabe</a> </p>
+
     <form id="upload_form">
-        <p> ルームファイル(zip形式)をアップロードしてください </p>
+        <p> ルームファイル(zip形式)をアップロードしてください。 </p>
         <input type="file" name="zip_input" />
 
         <p> タイトルを入力してください </p>
@@ -21,6 +27,7 @@
 
     <button id="upload_btn">アップロード</button>
 
+    <br><br><hr>
     <p>ルーム一覧</p>
     <table id="room_list">
         <tr>
@@ -59,30 +66,58 @@
 
         };
 
-        upload_btn.onclick = function () {
+        function onSignIn(googleUser) {
 
-            var formData = new FormData(document.getElementById("upload_form"))
+            var id_token = googleUser.getAuthResponse().id_token;
 
-            var xhr = new XMLHttpRequest()
+            upload_btn.onclick = function () {
 
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    var status = xhr.status;
-                    if (status === 0 || (status >= 200 && status < 400)) {
-                        var res = JSON.parse(xhr.response)
-                        addRoomUrl(res[0], res[1], res[2]);
-                    } else {
-                        console.log("Error. Status: " + status)
+                // info -> fileの順にuploadするように
+
+                // infoはformをjsonに変換して、そのうちのtitleとdescriptionを抽出＆id_tokenをjsonにして、新しいjsonオブジェクトで送信
+
+
+                var formData = new FormData(document.getElementById("upload_form"))
+                var formObject = {};
+                formData.forEach(function(value, key){
+                    formObject[key] = value;
+                });
+
+                //console.log(typeof formObject['title'])
+                
+                infoObject = {};
+                infoObject['title'] = formObject['title'];
+                infoObject['description'] = formObject['description'];
+                infoObject['token'] = id_token;
+
+                var xhr = new XMLHttpRequest()
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        var status = xhr.status;
+                        if (status === 0 || (status >= 200 && status < 400)) {
+                            var res = JSON.parse(xhr.response)
+                            addRoomUrl(res[0], res[1], res[2]);
+                        } else {
+                            console.log("Error. Status: " + status)
+                        }
                     }
                 }
-            }
 
-            xhr.open('POST', '/api/upload') //第3引数はasyncするか。デフォルトでtrue
-            xhr.send(formData)
+                xhr.open('POST', '/api/upload_info')
+                xhr.setRequestHeader('Content-Type', 'application/json')
+                xhr.send(JSON.stringify(infoObject))
+
+                // xhr.open('POST', '/api/upload_file')
+                // xhr.send(fileObject)
+
+                }
 
         }
 
     </script>
+
+    <div hidden class="g-signin2" data-onsuccess="onSignIn"></div>
 
 </body>
 
