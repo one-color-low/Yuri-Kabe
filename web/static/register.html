@@ -9,6 +9,7 @@
     <meta name="google-signin-client_id" content="248112257157-bqfdj7g676v0b9j5m747cveuchoj4p5v.apps.googleusercontent.com">
 
     <script>
+        console.log("test")
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -20,7 +21,7 @@
             console.log('Token: ' + id_token);
 
             infoObject = {};
-            infoObject['token'] = id_token;
+            infoObject['id_token'] = id_token;
 
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/api/register');
@@ -39,7 +40,7 @@
 
 <body>
 
-    <p> <a href="./">Yuri-Kabe</a> </p>
+    <p><a href="./">Yuri-Kabe</a></p>
 
     <p>Register with Google</p>
 

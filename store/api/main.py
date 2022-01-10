@@ -2,10 +2,10 @@ from flask import Flask, request, jsonify, flash, redirect
 import zipfile, os
 import database
 from models.models import *
+import requests, json
 
 import random
 import uuid
-import json
 
 app = Flask(__name__)
 
@@ -28,13 +28,23 @@ def register():
     user_name = "anonymous"
 
     info = request.get_json()
-    access_token = info['token']
+    id_token = info['id_token']
+
+    params = (
+        ('id_token', str(id_token) ),
+    )
+
+    response = requests.get('https://oauth2.googleapis.com/tokeninfo', params=params)
+    
+    response_dict = json.loads(response.text)
+
+    google_sub = response_dict["sub"]
 
     # tokenをDBに保存
     UserOperation.add_entry(
         id=user_id,
         name=user_name,
-        token=access_token
+        google_sub=google_sub
     )
 
     return "ok"
@@ -73,10 +83,29 @@ def upload():
         return jsonify({'message': 'No input description.'}), 400
     
 
-    access_token = request.get_data()
-    
+    if 'id_token' not in request.form:
+        return jsonify({'message': 'No id_token part.'}), 400
 
-    author = UserOperation.get_id_from_token(access_token)
+    id_token = request.form['id_token']
+
+    if id_token == '':
+        return jsonify({'message': 'No input id_token.'}), 400
+
+    params = (
+        ('id_token', str(id_token) ),
+    )
+
+    response = requests.get('https://oauth2.googleapis.com/tokeninfo', params=params)
+    
+    response_dict = json.loads(response.text)
+
+    google_sub = response_dict["sub"]
+
+    # google_subをもとに、Userテーブルからuser_idを取得
+    author = UserOperation.get_id_from_google_sub(google_sub)
+
+    if author == "not found":
+        return jsonify({'message': 'Unvalid User.'}), 400
 
     room_id = str(uuid.uuid1())
 
@@ -95,55 +124,7 @@ def upload():
 
     return jsonify([room_id, request.form['title'], request.form['description']]), 200
 
-#Room情報アップロード用API
-@app.route('/upload_info', methods=['GET', 'POST'])
-def upload_info():
 
-    if request.method != 'POST':
-        return jsonify({'message': 'Unexpected request type.'}), 400
-
-    info = request.get_json()
-
-    if 'title' not in info:
-        return jsonify({'message': 'No title part.'}), 400
-
-    title = info['title']
-
-    if title == '':
-        return jsonify({'message': 'No input title.'}), 400
-
-
-    if 'description' not in info:
-        return jsonify({'message': 'No description part.'}), 400
-
-    description = info['description']
-
-    if description == '':
-        return jsonify({'message': 'No input description.'}), 400
-    
-
-    if 'token' not in info:
-        return jsonify({'message': 'No token part.'}), 400
-
-    access_token = info['token']
-
-    if access_token == '':
-        return jsonify({'message': 'No input token.'}), 400
-
-    author = UserOperation.get_id_from_token(access_token)
-    print(author)
-
-    room_id = str(uuid.uuid1())
-
-    #DB更新
-    RoomOperation.add_entry(
-        id=room_id,
-        author=author,
-        title=title,
-        description=description
-    )
-
-    return jsonify([room_id, title, description]), 200
 
 # jsonでroom_infoテーブルを上から10個返すAPI
 @app.route('/get_list', methods=['GET', 'POST'])

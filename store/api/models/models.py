@@ -1,5 +1,4 @@
 from os import name
-from posix import RTLD_NODELETE
 from database import db
 
 # これがModel
@@ -14,7 +13,7 @@ class User(db.Model):
     __tablename__ = "user_info" 
     id = db.Column(db.String(), nullable=False, primary_key=True) 
     name = db.Column(db.String(), nullable=False)
-    token = db.Column(db.String(), nullable=True)
+    google_sub = db.Column(db.String(), nullable=True)
 
 # こっからメソッド
 class RoomOperation():
@@ -41,11 +40,11 @@ class RoomOperation():
         return table
     
 class UserOperation():
-    def add_entry(id, name, token):
+    def add_entry(id, name, google_sub):
         entry = User()
         entry.id = id
         entry.name = name
-        entry.token = token
+        entry.google_sub = google_sub
 
         db.session.add(entry)
         db.session.commit()
@@ -57,15 +56,14 @@ class UserOperation():
             if row.id == id:
                 return True
         return False
+    
+    def get_id_from_google_sub(google_sub):
+        table = User.query.all()
+        for row in table:
+            if row.google_sub == google_sub:
+                return row.id
+        return "not found"
 
     def get_latest_n(n):
         table = db.session.query(User).all()
         return table
-
-    def get_id_from_token(token):
-        table = User.query.all()
-        for row in table:
-            if row.token == token:
-                print("ok")
-                return row.id
-        return "user id not found."
