@@ -35,6 +35,7 @@
         <tr>
             <td>タイトル</td>
             <td>説明文</td>
+            <td>Author</td>
         </tr>
     </table>
 
@@ -44,14 +45,16 @@
 
         var upload_btn = document.getElementById("upload_btn")
 
-        function addRoomUrl(room_id, title, description){
+        function addRoomUrl(room_id, title, description, author){
             var table = document.getElementById("room_list")
             var rows = table.insertRow(-1)
             var cell_0 = rows.insertCell(0)
             var cell_1 = rows.insertCell(1)
+            var cell_2 = rows.insertCell(2)
             var room_url = "http://" + location.host + "/store/" + room_id + "/1st/"
             cell_0.innerHTML = '<a href="' + room_url + '">' + title + '</a>'
             cell_1.innerHTML = '<div>' + description + '</div>'
+            cell_2.innerHTML = '<div>' + author + '</div>'
         }
 
         window.onload = function() {
@@ -61,7 +64,7 @@
                     //console.log(xhr.response)
                     var res_list = JSON.parse(xhr.response)
                     for (var res of res_list) {
-                        addRoomUrl(res[0], res[1], res[2]);
+                        addRoomUrl(res[0], res[1], res[2], res[3]);
                     }
                 }
             }
@@ -81,7 +84,7 @@
                     var status = xhr.status;
                     if (status === 0 || (status >= 200 && status < 400)) {
                         var res = JSON.parse(xhr.response)
-                        addRoomUrl(res[0], res[1], res[2]);
+                        addRoomUrl(res[0], res[1], res[2], res[3]);
                     } else {
                         console.log("Error. Status: " + status)
                     }

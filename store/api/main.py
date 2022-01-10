@@ -21,14 +21,23 @@ database.init_db(app)
 @app.route('/register', methods=['POST'])
 def register():
 
-    if request.method != 'POST':
-        return jsonify({'message': 'Unexpected request type.'}), 400
+    # user_name
+    if 'user_name' not in request.form:
+        return jsonify({'message': 'No user_name part.'}), 400
 
-    user_id = str(uuid.uuid1())
-    user_name = "anonymous"
+    user_name = request.form['user_name']
 
-    info = request.get_json()
-    id_token = info['id_token']
+    if user_name == '':
+        return jsonify({'message': 'No input user_name.'}), 400
+
+    # id_token -> google_subの取得
+    if 'id_token' not in request.form:
+        return jsonify({'message': 'No id_token part.'}), 400
+
+    id_token = request.form['id_token']
+
+    if id_token == '':
+        return jsonify({'message': 'No input id_token.'}), 400
 
     params = (
         ('id_token', str(id_token) ),
@@ -39,6 +48,9 @@ def register():
     response_dict = json.loads(response.text)
 
     google_sub = response_dict["sub"]
+
+    # user_idの生成
+    user_id = str(uuid.uuid1())
 
     # tokenをDBに保存
     UserOperation.add_entry(
@@ -101,7 +113,7 @@ def upload():
 
     google_sub = response_dict["sub"]
 
-    # google_subをもとに、Userテーブルからuser_idを取得
+    # google_subをもとに、Userテーブルからauthorのuser_idを取得
     author = UserOperation.get_id_from_google_sub(google_sub)
 
     if author == "not found":
@@ -122,7 +134,9 @@ def upload():
         description=description
     )
 
-    return jsonify([room_id, request.form['title'], request.form['description']]), 200
+    author_name = UserOperation.get_name_from_id(author)
+
+    return jsonify([room_id, request.form['title'], request.form['description'], author_name]), 200
 
 
 
@@ -132,7 +146,8 @@ def get_list():
     table = RoomOperation.get_latest_n(1)
     data_list = []
     for row in table:
-        data = [row.id, row.title, row.description]
+        author_name = UserOperation.get_name_from_id(row.author)
+        data = [row.id, row.title, row.description, author_name]
         data_list.append(data)
     return jsonify(data_list)
 

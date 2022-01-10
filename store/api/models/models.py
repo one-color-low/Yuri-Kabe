@@ -64,6 +64,13 @@ class UserOperation():
                 return row.id
         return "not found"
 
+    def get_name_from_id(id):
+        table = User.query.all()
+        for row in table:
+            if row.id == id:
+                return row.name
+        return "not found"
+
     def get_latest_n(n):
         table = db.session.query(User).all()
         return table
